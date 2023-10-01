@@ -32,7 +32,7 @@ app.use(express.json());
     res.send(post);
   });
   // create a route for creating a post
-  app.post('\posts', async(req,res)=> {
+  app.post('/posts', async(req,res)=> {
     const image = req.body.image;
     const caption = req.body.caption;
     const post = new Post({
@@ -85,13 +85,14 @@ app.put('/posts/:id/comment',async(req,res)=>{
     const comment= req.body.comment;
     const post = await Post.findById(id);
     post.comments.push(comment);
+    await post.save();
 }
 );
 // create a route to get all comments on post
 app.get('/posts/:id/comments', async(req,res)=>{
 const id = req.params.id;
 const post = await Post.findById(id);
-res.send(post.comments());
+res.send(post.comments);
 
 }
 );
@@ -99,7 +100,7 @@ res.send(post.comments());
 app.get('/posts/:id/likes', async(req,res)=>{
     const id = req.params.id;
     const post = await Post.findById(id);
-    res.send(post.likes());
+    res.json(post.likes);
     
     }
     );
